@@ -7,11 +7,11 @@ import React from 'react'
 const Title = ({course}) => <h1>{course}</h1>
 
 
-const Parrafo = (props) => <p>{props.part} {props.exercise}</p>
+const Parrafo = ({part,exercise}) => <p>{part} {exercise}</p>
 
 const Total = ({total}) => {
   console.log(total);
-  return <p>Number of exercises { total.reduce((a, b) => a + b , 0) }</p>;
+  return <p onClick={ () => alert("Total") }>Number of exercises { total.reduce((a, b) => a + b , 0) }</p>;
     // props.total[0] + props.total[1] + props.total[2]}</p>;
 };
 
