@@ -9,8 +9,10 @@ const Title = ({course}) => <h1>{course}</h1>
 
 const Parrafo = (props) => <p>{props.part} {props.exercise}</p>
 
-const Total = (props) => {
-  return <p>Number of exercises {props.total[0] + props.total[1] + props.total[2]}</p>;
+const Total = ({total}) => {
+  console.log(total);
+  return <p>Number of exercises { total.reduce((a, b) => a + b , 0) }</p>;
+    // props.total[0] + props.total[1] + props.total[2]}</p>;
 };
 
 const App = () => {
