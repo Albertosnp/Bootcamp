@@ -5,6 +5,11 @@ const App = (props) => {
   const [notes, setNotes] = useState(props.notes);
   const [newNote, setNewNote] = useState('');
   const [showAll, setShowAll] = useState(true);
+  
+  //almacena array de notas completas o importantes segun si showAll esta true-false
+  const notesToShow = showAll
+  ? notes
+  : notes.filter(note => note.important === true)
 
   const handlerSubmit = (event) => {
     event.preventDefault();
@@ -31,12 +36,7 @@ const App = (props) => {
         {showAll?"Show only important": "Show all"}
       </button>
       <ul>
-        { notes
-        .filter(note => {
-          if(showAll === true) return true;
-          return note.important === true;
-        })
-        .map(note => <Note key={note.id} {...note} /> )}
+        {notesToShow.map(note => <Note key={note.id} {...note} /> )}
       </ul>
       <form onSubmit={handlerSubmit}>
           <input type="text" onChange={handlerChange} value={newNote}/>
