@@ -1,8 +1,7 @@
-export const Note = ({content, date}) => {
-  console.log(content);
+export const Note = ({title, body}) => {
     return (
-      <li>{content}
-        <p>{date}</p>
+      <li>{title}
+        <p>{body}</p>
       </li>
     );
 };

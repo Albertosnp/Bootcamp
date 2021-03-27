@@ -1,49 +1,58 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Note } from './Note';
+import { createNote } from './services/notes/createNote';
+import {getAllNotes} from './services/notes/getAllNotes'
 
-const App = (props) => {
-  const [notes, setNotes] = useState(props.notes);
+const App = () => {
+  const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState('');
-  const [showAll, setShowAll] = useState(true);
+  const [error, setError] = useState('');
   
-  //almacena array de notas completas o importantes segun si showAll esta true-false
-  const notesToShow = showAll
-  ? notes
-  : notes.filter(note => note.important === true)
+  useEffect(() => {
+    getAllNotes().then(notas => setNotes(notas));
+  }, []);
+
 
   const handlerSubmit = (event) => {
     event.preventDefault();
+    setError("");
+
     const noteToAddToState = {
-      id: notes.length + 1,   
-      content: newNote,
-      date: new Date().toISOString(),
-      important: Math.random() < 0.5 
-    } 
-    setNotes([...notes, noteToAddToState]);
+      userId: 1,
+      title: newNote,
+      body: newNote
+    };
+
+    const asincrona = async () => {
+      try {
+        const data = await createNote(noteToAddToState);
+        setNotes(prevNotes => [...prevNotes, data]);
+      } catch (error) {
+        setError("La api no funciona");
+      }
+    };
+    
+    asincrona()
     setNewNote('');
   };
+
   const handlerChange = (event) => {
-    setNewNote(event.target.value);    
-  };
-  const handlerShowAll = () => {
-    setShowAll(() => !showAll);
+    setNewNote(event.target.value);
   };
 
   return (
     <div>
       <h1>Notes</h1>
-      <button onClick={handlerShowAll}>
-        {showAll?"Show only important": "Show all"}
-      </button>
-      <ul>
-        {notesToShow.map(note => <Note key={note.id} {...note} /> )}
-      </ul>
+      <ol>
+        {notes.map(note => <Note key={note.id} {...note} />)}
+      </ol>
       <form onSubmit={handlerSubmit}>
-          <input type="text" onChange={handlerChange} value={newNote}/>
-          <button>Crear nota</button>
+        <input type="text" onChange={handlerChange} value={newNote} />
+        <button>Crear nota</button>
       </form>
+      {error? error : ""}
     </div>
   )
 }
 
-export default App 
+export default App
