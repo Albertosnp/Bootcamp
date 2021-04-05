@@ -17,10 +17,14 @@ const App = () => {
     event.preventDefault();
     setError("");
 
+    // const noteToAddToState = {
+    //   userId: 1,
+    //   title: newNote,
+    //   body: newNote
+    // };
     const noteToAddToState = {
-      userId: 1,
-      title: newNote,
-      body: newNote
+      content: newNote,
+      important: false
     };
 
     const asincrona = async () => {

@@ -1,7 +1,12 @@
-const { request, response } = require('express');
 const express = require('express');
+const cors = require('cors');
 const app = express();
+const logger = require('./loggerMiddleware');
+
+app.use(cors());
 app.use(express.json());
+app.use(logger);
+
 
 let notes = [
     {
@@ -73,7 +78,15 @@ app.post('/api/notes', (request, response) => {
     response.status(201).json(newNote)
 })
 
-const PORT = 3001
+app.use((request, response) => {
+    response.status(404).json({
+        error: "Not found"
+    })
+})
+
+//Para deployar en heroku utiliza variable de entorno
+const PORT = process.env.PORT || 3001;
+
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
